@@ -58,7 +58,7 @@ const calcNextPageRange = (list: string[], page: number): { range: number[]; isE
   const range = [rangeLow, rangeHigh - 1];
   let isEnd = false;
 
-  if (range[1] > list.length - 1) {
+  if (range[1] >= list.length - 1) {
     isEnd = true;
     range[1] = list.length - 1;
   }
