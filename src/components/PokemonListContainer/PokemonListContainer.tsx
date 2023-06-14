@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useReducer, useRef, useState } from 'react';
-import { useCachedData, useFetch } from '../../hooks';
+import { Fragment, useEffect, useReducer, useState } from 'react';
+import { useCachedData, useFetch, useWaitForImgsLoad } from '../../hooks';
 import { serialisePokemonInfo, serialisePokemonNames } from '../../serialisers';
 import SearchInput from '../SearchInput/SearchInput';
 import Pagination from '../Pagination/Pagination';
@@ -80,7 +80,7 @@ const nextPokemonUrls = (nameList: string[], page: number): { urls: string[]; is
 };
 
 interface Props {
-  handleSelectedPokemon: (name: string) => void;
+  handleSelectedPokemon: (pokemon: Pokemon) => void;
 }
 
 const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
@@ -92,8 +92,7 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     serialisePokemonNames
   );
   const [isEndOfResults, setIsEndofResults] = useState(false);
-  const [allImgsLoaded, setAllImgsLoaded] = useState(false);
-  const imgsLoadedCount = useRef(0);
+  const { allImgsLoaded, handleImgLoad, resetImgsLoadCheck } = useWaitForImgsLoad();
   const listData = fetchHook.data as null | Pokemon[];
   const dataLoading = cachedDataHook.loading || fetchHook.loading;
 
@@ -104,9 +103,8 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     const { urls, isEnd } = nextPokemonUrls(names, page);
     setIsEndofResults(isEnd);
     setFetchConfig(urls, serialisePokemonInfo);
-    setAllImgsLoaded(false);
-    imgsLoadedCount.current = 0;
-  }, [cachedDataHook.cachedData, search, page, setFetchConfig]);
+    resetImgsLoadCheck(urls.length);
+  }, [cachedDataHook.cachedData, search, page, setFetchConfig, resetImgsLoadCheck]);
 
   const handleSearchInput = (search: string): void => {
     dispatch({ type: ParamsActionType.NEW_SEARCH, search });
@@ -116,14 +114,6 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     if (isEndOfResults) return;
     if (direction === 'prev') dispatch({ type: ParamsActionType.PREV_PAGE });
     else dispatch({ type: ParamsActionType.NEXT_PAGE });
-  };
-
-  const handleImgLoad = (): void => {
-    if (listData && imgsLoadedCount.current === listData.length - 1) {
-      setAllImgsLoaded(true);
-    } else {
-      imgsLoadedCount.current = imgsLoadedCount.current + 1;
-    }
   };
 
   let content: string | JSX.Element = '';
@@ -136,7 +126,7 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
           {listData.map((pokemon) => {
             return (
               <li key={pokemon.id}>
-                <button onClick={() => handleSelectedPokemon(pokemon.name)}>view</button>
+                <button onClick={() => handleSelectedPokemon(pokemon)}>view</button>
                 <PokemonCard pokemon={pokemon} handleImageLoad={handleImgLoad} />
               </li>
             );
