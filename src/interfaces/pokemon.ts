@@ -10,5 +10,6 @@ export interface Pokemon {
   stats: PokemonStat[];
   imgSrc: string;
   abilities: string[];
-  moves: PokemonMove[];
+  levelUpMoves: PokemonMove[];
+  taughtMoves: PokemonMove[];
 }

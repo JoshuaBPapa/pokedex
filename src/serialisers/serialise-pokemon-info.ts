@@ -1,4 +1,13 @@
-import { Pokemon } from '../interfaces';
+import { NameUrlPairing, Pokemon, PokemonMove } from '../interfaces';
+
+interface PokemonInfoMovesRes {
+  move: NameUrlPairing;
+  version_group_details: {
+    level_learned_at: number;
+    move_learn_method: NameUrlPairing;
+    version_group: NameUrlPairing;
+  }[];
+}
 
 interface PokemonInfoRes {
   id: number;
@@ -6,20 +15,14 @@ interface PokemonInfoRes {
   order: number;
   types: {
     slot: number;
-    type: {
-      name: string;
-      url: string;
-    };
+    type: NameUrlPairing;
   }[];
   height: number;
   weight: number;
   stats: {
     base_stat: number;
     effort: number;
-    stat: {
-      name: string;
-      url: string;
-    };
+    stat: NameUrlPairing;
   }[];
   sprites: {
     other: {
@@ -29,31 +32,40 @@ interface PokemonInfoRes {
     };
   };
   abilities: {
-    ability: {
-      name: string;
-      url: string;
-    };
+    ability: NameUrlPairing;
     is_hidden: boolean;
     slot: number;
   }[];
-  moves: {
-    move: {
-      name: string;
-      url: string;
-    };
-    version_group_details: {
-      level_learned_at: number;
-      move_learn_method: {
-        name: string;
-        url: string;
-      };
-      version_group: {
-        name: string;
-        url: string;
-      };
-    }[];
-  }[];
+  moves: PokemonInfoMovesRes[];
 }
+
+const serialisePokemonMoves = (
+  moves: PokemonInfoMovesRes[]
+): { levelUpMoves: PokemonMove[]; taughtMoves: PokemonMove[] } => {
+  const unSortedLevelUpMoves: PokemonMove[] = [];
+  const unSortedTaughtMoves: PokemonMove[] = [];
+
+  moves.forEach(({ move, version_group_details }) => {
+    const { name } = move;
+    const moveDetail = version_group_details[0];
+    const level = moveDetail.level_learned_at;
+    const method = moveDetail.move_learn_method.name;
+
+    const moveToAdd = {
+      name,
+      level,
+      method,
+    };
+
+    if (level) unSortedLevelUpMoves.push(moveToAdd);
+    else unSortedTaughtMoves.push(moveToAdd);
+  });
+
+  const levelUpMoves = unSortedLevelUpMoves.sort((a, b) => a.level - b.level);
+  const taughtMoves = unSortedTaughtMoves.sort((a, b) => a.method.localeCompare(b.method));
+
+  return { levelUpMoves, taughtMoves };
+};
 
 export const serialisePokemonInfo = (pokemon: PokemonInfoRes): Pokemon => {
   const { id, order, name, height, weight } = pokemon;
@@ -66,18 +78,7 @@ export const serialisePokemonInfo = (pokemon: PokemonInfoRes): Pokemon => {
       stat: stat.stat.name,
     };
   });
-  const moves = pokemon.moves.map(({ move, version_group_details }) => {
-    const { name } = move;
-    const moveDetail = version_group_details[0];
-    const level = moveDetail.level_learned_at;
-    const method = moveDetail.move_learn_method.name;
-
-    return {
-      name,
-      level,
-      method,
-    };
-  });
+  const { levelUpMoves, taughtMoves } = serialisePokemonMoves(pokemon.moves);
 
   return {
     id,
@@ -88,7 +89,8 @@ export const serialisePokemonInfo = (pokemon: PokemonInfoRes): Pokemon => {
     abilities,
     imgSrc,
     types,
-    moves,
+    levelUpMoves,
+    taughtMoves,
     stats,
   };
 };
