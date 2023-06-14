@@ -1,11 +1,10 @@
+import { NameUrlPairing } from '../interfaces';
+
 interface GetPokemonNamesRes {
   count: number;
   next: string;
   previous: null;
-  results: {
-    name: string;
-    url: string;
-  }[];
+  results: NameUrlPairing[];
 }
 
 export const serialisePokemonNames = (data: GetPokemonNamesRes): string[] => {
