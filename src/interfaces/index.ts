@@ -4,3 +4,6 @@ export * from './pokemon-type';
 export * from './pokemon-stat';
 export * from './pokemon-move';
 export * from './serialiser';
+export * from './gender-percentage';
+export * from './evo-path';
+export * from './pokemon-detailed';
