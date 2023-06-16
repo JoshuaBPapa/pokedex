@@ -11,7 +11,7 @@ export type PokemonType =
   | 'fighting'
   | 'normal'
   | 'dark'
-  | 'metal'
+  | 'steel'
   | 'rock'
   | 'psychic'
   | 'ground'
