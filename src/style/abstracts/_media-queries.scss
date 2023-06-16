@@ -1,0 +1,26 @@
+@use './variables' as *;
+
+$screen-md-min: 768px;
+$screen-lg-min: 1024px;
+$screen-xl-min: $container-max-width;
+
+// Tablets
+@mixin md-breakpoint {
+  @media (min-width: #{$screen-md-min}) {
+    @content;
+  }
+}
+
+// Small Desktop
+@mixin lg-breakpoint {
+  @media (min-width: #{$screen-lg-min}) {
+    @content;
+  }
+}
+
+// Desktop
+@mixin xl-breakpoint {
+  @media (min-width: #{$screen-xl-min}) {
+    @content;
+  }
+}
