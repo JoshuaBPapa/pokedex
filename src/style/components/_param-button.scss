@@ -1,0 +1,11 @@
+.param-button {
+  box-shadow: #00000057 -2px 2px;
+  background-color: #ffc400;
+  display: inline-flex;
+  padding: 10px;
+  border-radius: 50%;
+
+  &:active {
+    box-shadow: inset#00000057 -2px 2px;
+  }
+}

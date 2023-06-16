@@ -1,0 +1,11 @@
+@use '../../style' as *;
+
+.pagination {
+  align-items: center;
+  display: flex;
+  margin-bottom: 10px;
+
+  @include lg-breakpoint {
+    margin-bottom: 0;
+  }
+}

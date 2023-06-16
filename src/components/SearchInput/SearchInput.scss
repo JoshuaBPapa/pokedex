@@ -1,0 +1,30 @@
+@use '../../style' as *;
+
+.search-input {
+  align-items: center;
+  display: flex;
+  margin-right: 0;
+  width: 100%;
+
+  input {
+    color: white;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: normal;
+    opacity: 0.8;
+    padding: 10px;
+    padding-right: 20px;
+    text-align: right;
+    width: 100%;
+
+    &::placeholder {
+      color: white;
+    }
+  }
+
+  @include lg-breakpoint {
+    flex-direction: row;
+    margin-right: 20px;
+    width: 50%;
+  }
+}

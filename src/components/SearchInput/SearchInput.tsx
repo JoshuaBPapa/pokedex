@@ -1,4 +1,7 @@
 import { FormEvent, useState } from 'react';
+import { PokedexScreen } from '../PokedexScreen/PokedexScreen';
+import { ReactComponent as SearchIcon } from '../../imgs/icons/search.svg';
+import './SearchInput.scss';
 
 interface Props {
   handleSearchInput: (query: string) => void;
@@ -16,15 +19,20 @@ const SearchInput: React.FC<Props> = ({ handleSearchInput, disabled }) => {
   };
 
   return (
-    <form onSubmit={(e) => onSubmit(e)}>
-      <input
-        value={input}
-        type="text"
-        placeholder="Search by name"
-        readOnly={disabled}
-        onChange={(e) => setInput(e.target.value)}
-      />
-      <button disabled={disabled}>search</button>
+    <form onSubmit={(e) => onSubmit(e)} className="search-input">
+      <PokedexScreen styleProps={{ marginRight: '10px', width: '100%' }}>
+        <input
+          value={input}
+          type="text"
+          placeholder="Search by name..."
+          readOnly={false}
+          onChange={(e) => setInput(e.target.value)}
+          disabled={disabled}
+        />
+      </PokedexScreen>
+      <button aria-label="search" disabled={disabled} className="param-button">
+        <SearchIcon />
+      </button>
     </form>
   );
 };
