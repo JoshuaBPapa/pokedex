@@ -1,4 +1,4 @@
-import { NameUrlPairing, Pokemon, PokemonMove } from '../interfaces';
+import { NameUrlPairing, Pokemon, PokemonMove, PokemonType } from '../interfaces';
 
 interface PokemonInfoMovesRes {
   move: NameUrlPairing;
@@ -71,7 +71,7 @@ export const serialisePokemonInfo = (pokemon: PokemonInfoRes): Pokemon => {
   const { id, order, name, height, weight } = pokemon;
   const abilities = pokemon.abilities.map(({ ability }) => ability.name);
   const imgSrc = pokemon.sprites.other['official-artwork'].front_default;
-  const types = pokemon.types.map(({ type }) => type.name);
+  const types = pokemon.types.map(({ type }) => type.name) as PokemonType[];
   const stats = pokemon.stats.map((stat) => {
     return {
       value: stat.base_stat,
