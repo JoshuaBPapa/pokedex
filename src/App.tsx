@@ -3,14 +3,23 @@ import PokemonListContainer from './components/PokemonListContainer/PokemonListC
 import PokemonDetailedContainer from './components/PokemonDetailedContainer/PokemonDetailedContainer';
 import { Pokemon } from './interfaces';
 import './style/_index.scss';
+import './App.scss';
 
 const App: React.FC = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<null | Pokemon>(null);
 
   return (
-    <div>
-      <PokemonDetailedContainer selectedPokemon={selectedPokemon} />
-      <PokemonListContainer handleSelectedPokemon={setSelectedPokemon} />
+    <div className="pokedex-container">
+      <div className="pokedex-case pokedex-case-first-half">
+        <PokemonListContainer handleSelectedPokemon={setSelectedPokemon} />
+      </div>
+      <div className="pokedex-case pokedex-case-centre">
+        <div className="pokedex-case-joint"></div>
+        <div className="pokedex-case-joint"></div>
+      </div>
+      <div className="pokedex-case pokedex-case-second-half">
+        <PokemonDetailedContainer selectedPokemon={selectedPokemon} />
+      </div>
     </div>
   );
 };

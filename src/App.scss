@@ -1,0 +1,111 @@
+@use './style' as *;
+
+$pokedex-border-shading: 5px solid rgba(0, 0, 0, 0.33);
+
+.pokedex-container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  margin: auto;
+  max-width: $container-max-width;
+  min-height: 600px;
+
+  .pokedex-case {
+    background-color: #da223a;
+    height: 100%;
+
+    &.pokedex-case-first-half,
+    &.pokedex-case-second-half {
+      padding: 15px;
+      width: 100%;
+
+      @include lg-breakpoint {
+        padding: 40px 30px;
+        width: 48%;
+      }
+    }
+
+    &.pokedex-case-first-half {
+      border-left: $pokedex-border-shading;
+
+      @include lg-breakpoint {
+        border-bottom: $pokedex-border-shading;
+        border-width: 10px;
+      }
+    }
+
+    &.pokedex-case-second-half {
+      border-left: $pokedex-border-shading;
+      border-bottom: $pokedex-border-shading;
+
+      @include lg-breakpoint {
+        border-left: none;
+        border-width: 10px;
+      }
+    }
+
+    &.pokedex-case-centre {
+      border-top: $pokedex-border-shading;
+      border-bottom: $pokedex-border-shading;
+      box-shadow: rgba(0, 0, 0, 0.169) 0px 5px 5px 0px,
+        inset rgba(255, 255, 255, 0.09) 0px 5px 5px 0px;
+      height: 10%;
+      max-height: 50px;
+      min-height: 35px;
+      position: relative;
+      width: 100%;
+
+      @include lg-breakpoint {
+        border-bottom: none;
+        border-left: $pokedex-border-shading;
+        border-right: $pokedex-border-shading;
+        border-top: none;
+        box-shadow: rgba(0, 0, 0, 0.169) 20px 0px 20px 0px,
+          inset rgba(255, 255, 255, 0.09) 20px 0px 10px 0px;
+        height: 100%;
+        max-height: none;
+        min-height: none;
+        width: 4%;
+      }
+    }
+
+    .pokedex-case-joint {
+      border-left: $pokedex-border-shading;
+      border-right: $pokedex-border-shading;
+      height: 100%;
+      position: absolute;
+      width: 40px;
+
+      @include lg-breakpoint {
+        border-bottom: $pokedex-border-shading;
+        border-left: none;
+        border-right: none;
+        border-top: $pokedex-border-shading;
+        height: auto;
+        width: 100%;
+      }
+
+      &:first-of-type {
+        left: 20%;
+
+        @include lg-breakpoint {
+          left: 0;
+          top: 20%;
+        }
+      }
+
+      &:last-of-type {
+        right: 20%;
+
+        @include lg-breakpoint {
+          right: 0;
+          bottom: 20%;
+        }
+      }
+    }
+  }
+
+  @include lg-breakpoint {
+    flex-direction: row;
+  }
+}
