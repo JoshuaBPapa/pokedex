@@ -30,7 +30,7 @@ const SearchInput: React.FC<Props> = ({ handleSearchInput, disabled }) => {
           disabled={disabled}
         />
       </PokedexScreen>
-      <button aria-label="search" disabled={disabled} className="param-button">
+      <button aria-label="search" title="search" disabled={disabled} className="param-button">
         <SearchIcon />
       </button>
     </form>

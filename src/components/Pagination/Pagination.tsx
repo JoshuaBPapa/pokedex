@@ -16,17 +16,19 @@ const Pagination: React.FC<Props> = ({ handlePageClick, currentPage, onLastPage,
       <button
         className="param-button"
         aria-label="previous"
+        title="previous"
         onClick={() => handlePageClick('prev')}
         disabled={currentPage <= 1 || allDisabled}
       >
         <PrevIcon />
       </button>
-      <PokedexScreen styleProps={{ padding: '10px', textAlign: 'center', margin: '0 5px' }}>
+      <PokedexScreen styleProps={{ padding: '5px 15px', textAlign: 'center', margin: '0 5px' }}>
         Page: {currentPage}
       </PokedexScreen>
       <button
         className="param-button"
         aria-label="next"
+        title="next"
         onClick={() => handlePageClick('next')}
         disabled={onLastPage || allDisabled}
       >
