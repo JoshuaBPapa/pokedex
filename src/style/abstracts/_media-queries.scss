@@ -1,8 +1,6 @@
-@use './variables' as *;
-
 $screen-md-min: 768px;
 $screen-lg-min: 1024px;
-$screen-xl-min: $container-max-width;
+$screen-xl-min: 1400px;
 
 // Tablets
 @mixin md-breakpoint {
