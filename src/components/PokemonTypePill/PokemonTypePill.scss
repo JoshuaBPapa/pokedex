@@ -1,0 +1,22 @@
+.pokemon-type-pill {
+  align-items: center;
+  border: 3px solid white;
+  border-radius: 50px;
+  display: inline-flex;
+  justify-content: space-between;
+
+  .type-icon-container {
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+  }
+
+  .type {
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 0.75rem;
+    margin: 0 10px;
+  }
+}
