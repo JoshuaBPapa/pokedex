@@ -1,0 +1,76 @@
+@use '../../style' as *;
+
+.pokemon-list-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .list-params {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+
+    @include lg-breakpoint {
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+
+  //// DESCRIBE MEDIA QUERIES BELOW
+  .pokemon-list-loaded {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .pokemon-list-item {
+      margin-top: 40px;
+      position: relative;
+      width: 100%;
+
+      // show two pokemon per row after md-breakpoint
+      @include md-breakpoint {
+        width: 48%;
+
+        &:nth-child(-n + 2) {
+          margin-top: 0;
+        }
+      }
+
+      // pokedex will change orientation after lg breakpoint so the list will not have enough with for two pokemon per row. Return to one pokemon.
+      @include lg-breakpoint {
+        width: 100%;
+
+        &:nth-child(-n + 2) {
+          margin-top: 40px;
+        }
+      }
+
+      // pokedex large enough for two pokemon per row again after xl breakpoint
+      @include xl-breakpoint {
+        width: 48%;
+
+        &:nth-child(-n + 2) {
+          margin-top: 0;
+        }
+      }
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      .select-button {
+        background: transparent;
+        border: none;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+    }
+  }
+}

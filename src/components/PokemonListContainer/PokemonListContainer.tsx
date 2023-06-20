@@ -5,6 +5,8 @@ import SearchInput from '../SearchInput/SearchInput';
 import Pagination from '../Pagination/Pagination';
 import { Pokemon } from '../../interfaces';
 import PokemonCard from '../PokemonCard/PokemonCard';
+import { PokedexScreen } from '../PokedexScreen/PokedexScreen';
+import './PokemonListContainer.scss';
 
 enum ParamsActionType {
   NEXT_PAGE = 'next_page',
@@ -122,11 +124,16 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     content = (
       <Fragment>
         {!allImgsLoaded && 'loading images'}
-        <ul style={{ display: allImgsLoaded ? 'block' : 'none' }}>
+        <ul className={allImgsLoaded ? 'pokemon-list-loaded' : 'display-none'}>
           {listData.map((pokemon) => {
             return (
-              <li key={pokemon.id}>
-                <button onClick={() => handleSelectedPokemon(pokemon)}>view</button>
+              <li key={pokemon.id} className="pokemon-list-item">
+                <button
+                  title="select pokemon"
+                  aria-label="select pokemon"
+                  onClick={() => handleSelectedPokemon(pokemon)}
+                  className="select-button"
+                ></button>
                 <PokemonCard pokemon={pokemon} handleImageLoad={handleImgLoad} />
               </li>
             );
@@ -136,15 +143,22 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     );
   }
   return (
-    <div>
-      <SearchInput handleSearchInput={handleSearchInput} disabled={dataLoading || !allImgsLoaded} />
-      <Pagination
-        currentPage={page}
-        handlePageClick={handlePageClick}
-        onLastPage={isEndOfResults}
-        allDisabled={dataLoading || !allImgsLoaded}
-      />
-      {content}
+    <div className="pokemon-list-container">
+      <div className="list-params">
+        <SearchInput
+          handleSearchInput={handleSearchInput}
+          disabled={dataLoading || !allImgsLoaded}
+        />
+        <Pagination
+          currentPage={page}
+          handlePageClick={handlePageClick}
+          onLastPage={isEndOfResults}
+          allDisabled={dataLoading || !allImgsLoaded}
+        />
+      </div>
+      <PokedexScreen styleProps={{ padding: '20px', flex: 1, overflow: 'auto' }}>
+        {content}
+      </PokedexScreen>
     </div>
   );
 };
