@@ -19,7 +19,7 @@ const PokemonEvolutionPaths: React.FC<Props> = ({ evolutionPaths, bgColour }) =>
         {!allImgsLoaded && 'loading images'}
         <ul className={allImgsLoaded ? 'evolution-path-list' : 'display-none'}>
           {evolutionPaths.map((path, index) => {
-            totalToLoadCount.current += path.length - 1;
+            totalToLoadCount.current += path.length;
 
             return (
               <li key={index}>
