@@ -1,3 +1,5 @@
+@use '../abstracts' as *;
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -11,4 +13,5 @@ ul {
 
 button {
   cursor: pointer;
+  font-family: $primary-font-family;
 }
