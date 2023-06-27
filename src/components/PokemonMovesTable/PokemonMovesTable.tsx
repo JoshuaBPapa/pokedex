@@ -1,11 +1,13 @@
 import { PokemonMove } from '../../interfaces';
+import './PokemonMovesTable.scss';
 
 interface Props {
   levelUpMoves: PokemonMove[];
   taughtMoves: PokemonMove[];
+  bgColour: string;
 }
 
-const PokemonMovesTable: React.FC<Props> = ({ levelUpMoves, taughtMoves }) => {
+const PokemonMovesTable: React.FC<Props> = ({ levelUpMoves, taughtMoves, bgColour }) => {
   const allMoves = [...levelUpMoves, ...taughtMoves];
 
   const tableBody = allMoves.map((move) => (
@@ -17,8 +19,8 @@ const PokemonMovesTable: React.FC<Props> = ({ levelUpMoves, taughtMoves }) => {
   ));
 
   return (
-    <table>
-      <thead>
+    <table className="pokemon-moves-table">
+      <thead style={{ backgroundColor: bgColour }}>
         <tr>
           <th>Level</th>
           <th>Move Name</th>
