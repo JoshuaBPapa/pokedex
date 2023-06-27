@@ -1,0 +1,29 @@
+.pokemon-stats-container {
+  margin-bottom: 15px;
+
+  .stat {
+    margin-bottom: 5px;
+
+    .stat-bar-container {
+      background: #bbbbbb;
+      border: 3px solid white;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      overflow: hidden;
+      text-align: right;
+      width: 280px;
+
+      .stat-bar {
+        background-color: rgb(103, 110, 117);
+        box-shadow: inset 5px -5px 10px 0 rgba(54, 54, 54, 0.2);
+        border-radius: 10px;
+        font-weight: bold;
+        padding: 5px 10px;
+      }
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

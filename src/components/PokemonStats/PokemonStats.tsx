@@ -1,30 +1,32 @@
 import { PokemonStat } from '../../interfaces';
+import './PokemonStats.scss';
 
 interface Props {
   stats: PokemonStat[];
+  barColour: string;
 }
 
-const PokemonStats: React.FC<Props> = ({ stats }) => {
-  // the highest base stats found in the game from different pokemon
-  // will be used to create a comparison percentage
-  const bestBaseStats: { [key: string]: number } = {
-    hp: 255,
-    attack: 190,
-    defense: 230,
-    'special-attack': 194,
-    'special-defense': 230,
-    speed: 180,
-  };
+const PokemonStats: React.FC<Props> = ({ stats, barColour }) => {
+  const largestVal = stats.reduce((a, stat) => Math.max(a, stat.value), -Infinity);
 
   const content = stats.map((stat) => (
-    <div key={stat.stat}>
-      {stat.stat.replace('-', ' ').toUpperCase()}
-      {(stat.value / bestBaseStats[stat.stat]) * 100}
-      {stat.value}
+    <div key={stat.stat} className="stat">
+      <span>{stat.stat.replace('-', ' ').toUpperCase()}</span>
+      <div className="stat-bar-container">
+        <div
+          className="stat-bar"
+          style={{
+            backgroundColor: barColour,
+            width: Math.floor((stat.value / largestVal) * 100) + '%',
+          }}
+        >
+          {stat.value}
+        </div>
+      </div>
     </div>
   ));
 
-  return <div>{content}</div>;
+  return <div className="pokemon-stats-container">{content}</div>;
 };
 
 export default PokemonStats;
