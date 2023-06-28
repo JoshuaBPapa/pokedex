@@ -5,7 +5,7 @@ import SearchInput from '../SearchInput/SearchInput';
 import Pagination from '../Pagination/Pagination';
 import { Pokemon } from '../../interfaces';
 import PokemonCard from '../PokemonCard/PokemonCard';
-import { PokedexScreen } from '../PokedexScreen/PokedexScreen';
+import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import './PokemonListContainer.scss';
 
 enum ParamsActionType {

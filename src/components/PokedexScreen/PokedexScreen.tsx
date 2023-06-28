@@ -6,10 +6,12 @@ interface Props {
   styleProps?: CSSProperties;
 }
 
-export const PokedexScreen: React.FC<Props> = ({ children, styleProps }) => {
+const PokedexScreen: React.FC<Props> = ({ children, styleProps }) => {
   return (
     <div className="pokedex-screen" style={styleProps}>
       {children}
     </div>
   );
 };
+
+export default PokedexScreen;

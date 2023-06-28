@@ -1,4 +1,4 @@
-import { PokedexScreen } from '../PokedexScreen/PokedexScreen';
+import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import { ReactComponent as PrevIcon } from '../../imgs/icons/prev-arrow.svg';
 import { ReactComponent as NextIcon } from '../../imgs/icons/next-arrow.svg';
 import './Pagination.scss';

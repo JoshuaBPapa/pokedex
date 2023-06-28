@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { PokedexScreen } from '../PokedexScreen/PokedexScreen';
+import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import { ReactComponent as SearchIcon } from '../../imgs/icons/search.svg';
 import './SearchInput.scss';
 
