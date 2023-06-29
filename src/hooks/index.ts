@@ -1,3 +1,3 @@
 export * from './useFetch';
 export * from './useCachedData';
-export * from './UseWaitForImgsLoad';
+export * from './useWaitForImgsLoad';
