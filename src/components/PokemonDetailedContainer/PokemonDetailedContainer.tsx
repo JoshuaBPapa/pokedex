@@ -10,6 +10,7 @@ import PokemonStats from '../PokemonStats/PokemonStats';
 import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import { getPokemonTypecolours } from '../../helpers';
 import PokemonTypePill from '../PokemonTypePill/PokemonTypePill';
+import pokemonImgErr from '../../imgs/pokemon-img-err.png';
 import './PokemonDetailedContainer.scss';
 
 const getAnimatedImgSrc = (id: number, name: string): string | null => {
@@ -116,6 +117,10 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
               }
               alt={selectedPokemon.name}
               onLoad={handleImgLoad}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = pokemonImgErr;
+              }}
             />
             <PokemonStats stats={selectedPokemon.stats} barColour={secondaryColour} />
             <div className="pokemon-extra-info">

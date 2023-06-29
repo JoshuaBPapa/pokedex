@@ -2,6 +2,7 @@ import { getPokemonHashNumber, getPokemonTypecolours } from '../../helpers';
 import typeBackgroundMap from '../../imgs/type-backgrounds';
 import { Pokemon } from '../../interfaces';
 import PokemonTypePill from '../PokemonTypePill/PokemonTypePill';
+import pokemonImgErr from '../../imgs/pokemon-img-err.png';
 import './PokemonCard.scss';
 
 interface Props {
@@ -36,6 +37,10 @@ const PokemonCard: React.FC<Props> = ({ pokemon, handleImageLoad }) => {
           alt={pokemon.name}
           onLoad={handleImageLoad}
           className="pokemon-image"
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            currentTarget.src = pokemonImgErr;
+          }}
         />
         <div className="type-background-icon">
           <TypeBackgroundIcon />
