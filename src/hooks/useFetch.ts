@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import { CustomError } from '../classes';
 import { Serialiser } from '../interfaces';
+import { ReqActionType, ReqState, useReqReducer } from './useReqReducer';
+import { fetchHandler } from '../helpers';
 
 enum ReqConfigActionType {
   SET_CONFIG = 'set_config',
@@ -33,54 +34,6 @@ const reqConfigReducer = (state: ReqConfigState, action: ReqConfigAction) => {
   }
 };
 
-enum ReqActionType {
-  REQUEST_START = 'request_start',
-  REQUEST_ERROR = 'request_error',
-  REQUEST_SUCCESS = 'request_sucess',
-}
-
-type ReqAction =
-  | { type: ReqActionType.REQUEST_START }
-  | { type: ReqActionType.REQUEST_ERROR; error: CustomError }
-  | { type: ReqActionType.REQUEST_SUCCESS; data: any };
-
-interface ReqState {
-  loading: boolean;
-  error: null | CustomError;
-  data: null | any;
-}
-
-const initReqState: ReqState = {
-  loading: false,
-  error: null,
-  data: null,
-};
-
-const reqReducer = (state: ReqState, action: ReqAction): ReqState => {
-  switch (action.type) {
-    case ReqActionType.REQUEST_START:
-      return {
-        loading: true,
-        error: null,
-        data: null,
-      };
-    case ReqActionType.REQUEST_ERROR:
-      return {
-        loading: false,
-        error: action.error,
-        data: null,
-      };
-    case ReqActionType.REQUEST_SUCCESS:
-      return {
-        loading: false,
-        error: null,
-        data: action.data,
-      };
-    default:
-      return initReqState;
-  }
-};
-
 interface UseFetchValue extends ReqState {
   setFetchConfig: (url: string | string[], serialiser?: Serialiser) => void;
 }
@@ -89,38 +42,25 @@ type UseFetch = () => UseFetchValue;
 
 export const useFetch: UseFetch = () => {
   const [{ url, serialiser }, reqConfigDispatch] = useReducer(reqConfigReducer, initReqConfigState);
-  const [{ loading, error, data }, reqDispatch] = useReducer(reqReducer, initReqState);
+  const { loading, error, data, reqDispatch } = useReqReducer();
 
   useEffect(() => {
     if (!url.length) return;
 
     reqDispatch({ type: ReqActionType.REQUEST_START });
 
-    const fetchHandler = (response: Promise<Response>): Promise<Response> => {
-      return response
-        .then((res) => {
-          if (res.status >= 400) {
-            throw new CustomError(res.status, res.statusText);
-          }
-          return res.json();
-        })
-        .then((resJson) => {
-          return serialiser ? serialiser(resJson) : resJson;
-        });
-    };
-
     let completedRequest: Promise<Response | Response[]>;
     if (Array.isArray(url)) {
-      completedRequest = Promise.all(url.map((u) => fetchHandler(fetch(u))));
+      completedRequest = Promise.all(url.map((u) => fetchHandler(fetch(u), serialiser)));
     } else {
-      completedRequest = fetchHandler(fetch(url));
+      completedRequest = fetchHandler(fetch(url), serialiser);
     }
 
     completedRequest
-      .then((data) => {
+      .then((resData) => {
         reqDispatch({
           type: ReqActionType.REQUEST_SUCCESS,
-          data,
+          data: resData,
         });
       })
       .catch((error) => {
@@ -129,7 +69,7 @@ export const useFetch: UseFetch = () => {
           error,
         });
       });
-  }, [url, serialiser]);
+  }, [url, serialiser, reqDispatch]);
 
   const setFetchConfig = useCallback((url: string | string[], serialiser?: Serialiser): void => {
     reqConfigDispatch({
