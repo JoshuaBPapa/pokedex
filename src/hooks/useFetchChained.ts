@@ -16,7 +16,7 @@ interface UseFetchChainedValue extends ReqState {
 type RunFetch = (
   chainRequest: ChainRequest,
   params?: { [key: string]: any } | undefined
-) => Promise<any[] | RunFetch>;
+) => Promise<any[] | RunFetch | void>;
 
 type UseFetchChained = () => UseFetchChainedValue;
 
@@ -47,9 +47,14 @@ export const useFetchChained: UseFetchChained = () => {
       });
     };
 
-    runFetch(fetchChain[i]).then((res) =>
-      reqDispatch({ type: ReqActionType.REQUEST_SUCCESS, data: res })
-    );
+    runFetch(fetchChain[i])
+      .then((res) => reqDispatch({ type: ReqActionType.REQUEST_SUCCESS, data: res }))
+      .catch((error) => {
+        reqDispatch({
+          type: ReqActionType.REQUEST_ERROR,
+          error,
+        });
+      });
   }, [fetchChain, reqDispatch]);
 
   return {
