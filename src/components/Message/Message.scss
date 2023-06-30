@@ -1,0 +1,19 @@
+.message {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+  padding: 30px 0;
+
+  img {
+    margin-bottom: 5px;
+    max-width: 100%;
+  }
+
+  p {
+    font-size: 1.35rem;
+    opacity: 0.75;
+    text-align: center;
+  }
+}
