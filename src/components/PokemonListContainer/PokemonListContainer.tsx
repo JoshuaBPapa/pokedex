@@ -120,7 +120,7 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
   };
 
   const handlePageClick = (direction: string): void => {
-    if (isEndOfResults) return;
+    if (isEndOfResults && direction === 'next') return;
     if (direction === 'prev') dispatch({ type: ParamsActionType.PREV_PAGE });
     else dispatch({ type: ParamsActionType.NEXT_PAGE });
   };
@@ -149,6 +149,9 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
             );
           })}
         </ul>
+        {isEndOfResults && allImgsLoaded && (
+          <div className="end-of-results">- END OF RESULTS -</div>
+        )}
       </Fragment>
     );
   }
