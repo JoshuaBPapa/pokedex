@@ -8,6 +8,7 @@ import PokemonCard from '../PokemonCard/PokemonCard';
 import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import './PokemonListContainer.scss';
 import Message from '../Message/Message';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 enum ParamsActionType {
   NEXT_PAGE = 'next_page',
@@ -98,6 +99,7 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
   const { allImgsLoaded, handleImgLoad, resetImgsLoadCheck } = useWaitForImgsLoad();
   const listData = fetchHook.data as null | Pokemon[];
   const dataLoading = cachedDataHook.loading || fetchHook.loading;
+  const error = cachedDataHook.error || fetchHook.error;
 
   // check if full pokemon name list is cached in local storage using the useCachedDataHook
   // if not, wait until the name list to be fetched by useCachedDataHook
@@ -125,9 +127,10 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
 
   let content: string | ReactNode = '';
   if (dataLoading) content = 'loading';
-  else if (!listData) {
+  else if (error) content = <ErrorMessage error={error} />;
+  else if (!listData && search) {
     content = <Message message="Pokémon not found" messageType="information" />;
-  } else {
+  } else if (listData) {
     content = (
       <Fragment>
         {!allImgsLoaded && 'loading images'}

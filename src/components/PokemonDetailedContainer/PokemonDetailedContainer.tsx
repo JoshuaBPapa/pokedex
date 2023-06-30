@@ -13,6 +13,7 @@ import PokemonTypePill from '../PokemonTypePill/PokemonTypePill';
 import pokemonImgErr from '../../imgs/pokemon-img-err.png';
 import './PokemonDetailedContainer.scss';
 import Message from '../Message/Message';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const getAnimatedImgSrc = (id: number, name: string): string | null => {
   // source for pokemon gifs - only has gifs for pokemon up to #0898
@@ -68,6 +69,7 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
     <Message message="Select a Pokémon from the list" messageType="instruction" />
   );
   if (loading) content = 'loading...';
+  else if (error) content = <ErrorMessage error={error} />;
   else if (pokemonDetails && selectedPokemon) {
     const infoTabs = [
       {
