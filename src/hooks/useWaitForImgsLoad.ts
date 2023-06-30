@@ -18,9 +18,10 @@ export const useWaitForImgsLoad: UseWaitForImgsLoad = () => {
   };
 
   const resetImgsLoadCheck = useCallback((totalCount = 0): void => {
-    setAllImgsLoaded(false);
     totalToLoadCount.current = totalCount;
     imgsLoadedCount.current = 0;
+    if (totalCount) setAllImgsLoaded(false);
+    else setAllImgsLoaded(true);
   }, []);
 
   return {

@@ -45,7 +45,13 @@ export const useFetch: UseFetch = () => {
   const { loading, error, data, reqDispatch } = useReqReducer();
 
   useEffect(() => {
-    if (!url.length) return;
+    if (!url.length) {
+      reqDispatch({
+        type: ReqActionType.REQUEST_SUCCESS,
+        data: null,
+      });
+      return;
+    }
 
     reqDispatch({ type: ReqActionType.REQUEST_START });
 
