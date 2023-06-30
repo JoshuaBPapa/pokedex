@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useReducer, useState } from 'react';
 import { useCachedData, useFetch, useWaitForImgsLoad } from '../../hooks';
 import { serialisePokemonInfo, serialisePokemonNames } from '../../serialisers';
 import SearchInput from '../SearchInput/SearchInput';
@@ -7,6 +7,7 @@ import { Pokemon } from '../../interfaces';
 import PokemonCard from '../PokemonCard/PokemonCard';
 import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import './PokemonListContainer.scss';
+import Message from '../Message/Message';
 
 enum ParamsActionType {
   NEXT_PAGE = 'next_page',
@@ -98,6 +99,10 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
   const listData = fetchHook.data as null | Pokemon[];
   const dataLoading = cachedDataHook.loading || fetchHook.loading;
 
+  // check if full pokemon name list is cached in local storage using the useCachedDataHook
+  // if not, wait until the name list to be fetched by useCachedDataHook
+  // when name list is cached, begin fetching pokemon information for the list page
+  // repeat process on page change or search input
   useEffect(() => {
     const allPokemonNames = cachedDataHook.cachedData as null | string[];
     if (!allPokemonNames) return;
@@ -118,9 +123,11 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     else dispatch({ type: ParamsActionType.NEXT_PAGE });
   };
 
-  let content: string | JSX.Element = '';
+  let content: string | ReactNode = '';
   if (dataLoading) content = 'loading';
-  else if (listData) {
+  else if (!listData) {
+    content = <Message message="Pokémon not found" messageType="information" />;
+  } else {
     content = (
       <Fragment>
         {!allImgsLoaded && 'loading images'}
@@ -142,6 +149,7 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
       </Fragment>
     );
   }
+
   return (
     <div className="pokemon-list-container">
       <div className="list-params">
