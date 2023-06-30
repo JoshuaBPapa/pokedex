@@ -12,6 +12,7 @@ import { getPokemonTypecolours } from '../../helpers';
 import PokemonTypePill from '../PokemonTypePill/PokemonTypePill';
 import pokemonImgErr from '../../imgs/pokemon-img-err.png';
 import './PokemonDetailedContainer.scss';
+import Message from '../Message/Message';
 
 const getAnimatedImgSrc = (id: number, name: string): string | null => {
   // source for pokemon gifs - only has gifs for pokemon up to #0898
@@ -63,7 +64,9 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
   const primaryColour = typeColours ? typeColours.primarycolour : '#8A809D';
   const secondaryColour = typeColours ? typeColours.primarycolour : '#59bae9';
 
-  let content: string | ReactNode = 'Select a Pokémon from the list';
+  let content: ReactNode = (
+    <Message message="Select a Pokémon from the list" messageType="instruction" />
+  );
   if (loading) content = 'loading...';
   else if (pokemonDetails && selectedPokemon) {
     const infoTabs = [
