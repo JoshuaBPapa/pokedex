@@ -6,7 +6,7 @@ interface Props {
 }
 
 const ErrorMessage: React.FC<Props> = ({ error }) => {
-  const status = error.status + ': ' || null;
+  const status = error.status ? error.status + ': ' : null;
   const message = error.message || 'Something went wrong. Please refresh and try again';
 
   return <Message message={status + message} messageType="error" />;
