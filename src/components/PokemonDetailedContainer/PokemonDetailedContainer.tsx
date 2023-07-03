@@ -14,6 +14,7 @@ import pokemonImgErr from '../../imgs/pokemon-img-err.png';
 import './PokemonDetailedContainer.scss';
 import Message from '../Message/Message';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import Loading from '../Loading/Loading';
 
 const getAnimatedImgSrc = (id: number, name: string): string | null => {
   // source for pokemon gifs - only has gifs for pokemon up to #0898
@@ -77,7 +78,7 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
   let content: ReactNode = (
     <Message message="Select a Pokémon from the list" messageType="instruction" />
   );
-  if (loading) content = 'loading...';
+  if (loading) content = <Loading message="Loading Details" />;
   else if (error) content = <ErrorMessage error={error} />;
   else if (pokemonDetailed) {
     const infoTabs = [
@@ -119,7 +120,7 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
 
     content = (
       <Fragment>
-        {!allImgsLoaded && 'loading image'}
+        {!allImgsLoaded && <Loading message="Loading Image" />}
         <div className={allImgsLoaded ? 'pokemon-details' : 'display-none'}>
           <span className="pokemon-name">{pokemonDetailed.name}</span>
           <div className="pokemon-overview">

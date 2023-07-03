@@ -1,6 +1,7 @@
 import { Fragment, ReactNode } from 'react';
 import { useWaitForImgsLoad } from '../../hooks';
 import { EvoPath } from '../../interfaces';
+import Loading from '../Loading/Loading';
 import './PokemonEvolutionPaths.scss';
 
 interface Props {
@@ -11,12 +12,11 @@ interface Props {
 const PokemonEvolutionPaths: React.FC<Props> = ({ evolutionPaths, bgColour }) => {
   const { allImgsLoaded, handleImgLoad, totalToLoadCount } = useWaitForImgsLoad();
 
-  let content: string | ReactNode = 'Loading Evolution Paths';
-  if (evolutionPaths[0].length === 1) content = 'This Pokémon is not part of any evolutions';
-  else {
+  let content: ReactNode = 'This Pokémon is not part of any evolutions';
+  if (evolutionPaths[0].length > 1) {
     content = (
       <Fragment>
-        {!allImgsLoaded && 'loading images'}
+        {!allImgsLoaded && <Loading message="Loading Images" />}
         <ul className={allImgsLoaded ? 'evolution-path-list' : 'display-none'}>
           {evolutionPaths.map((path, index) => {
             totalToLoadCount.current += path.length;

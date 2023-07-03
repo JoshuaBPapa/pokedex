@@ -9,6 +9,7 @@ import PokedexScreen from '../PokedexScreen/PokedexScreen';
 import './PokemonListContainer.scss';
 import Message from '../Message/Message';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import Loading from '../Loading/Loading';
 
 enum ParamsActionType {
   NEXT_PAGE = 'next_page',
@@ -125,15 +126,15 @@ const PokemonListContainer: React.FC<Props> = ({ handleSelectedPokemon }) => {
     else dispatch({ type: ParamsActionType.NEXT_PAGE });
   };
 
-  let content: string | ReactNode = '';
-  if (dataLoading) content = 'loading';
+  let content: ReactNode = <Loading message="Loading Pokémon List" />;
+  if (dataLoading) content = <Loading message="Loading Pokémon List" />;
   else if (error) content = <ErrorMessage error={error} />;
   else if (!listData && search) {
     content = <Message message="Pokémon not found" messageType="information" />;
   } else if (listData) {
     content = (
       <Fragment>
-        {!allImgsLoaded && 'loading images'}
+        {!allImgsLoaded && <Loading message="Loading Images" />}
         <ul className={allImgsLoaded ? 'pokemon-list-loaded' : 'display-none'}>
           {listData.map((pokemon) => {
             return (
