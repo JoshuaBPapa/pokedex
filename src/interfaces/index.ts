@@ -6,5 +6,5 @@ export * from './pokemon-move';
 export * from './serialiser';
 export * from './gender-percentage';
 export * from './evo-path';
-export * from './pokemon-details';
+export * from './pokemon-detailed';
 export * from './serialised-species';

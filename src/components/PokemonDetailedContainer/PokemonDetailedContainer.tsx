@@ -1,5 +1,5 @@
 import { Fragment, ReactNode, useEffect, useState } from 'react';
-import { EvoPath, Pokemon, PokemonDetails, SerialisedSpecies } from '../../interfaces';
+import { EvoPath, Pokemon, PokemonDetailed, SerialisedSpecies } from '../../interfaces';
 import { useWaitForImgsLoad, useFetchChained } from '../../hooks';
 import { serialiseEvolutionTree, serialisePokemonSpecies } from '../../serialisers';
 import InfoTabsContainer from '../InfoTabsContainer/InfoTabsContainer';
@@ -27,7 +27,7 @@ interface Props {
 }
 
 const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
-  const [pokemonDetails, setPokemonDetails] = useState<null | PokemonDetails>(null);
+  const [pokemonDetailed, setPokemonDetailed] = useState<null | PokemonDetailed>(null);
   const { allImgsLoaded, handleImgLoad, resetImgsLoadCheck } = useWaitForImgsLoad();
   const { setFetchChain, loading, error, data } = useFetchChained();
 
@@ -48,17 +48,26 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
   }, [selectedPokemon, setFetchChain, resetImgsLoadCheck]);
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || !selectedPokemon) return;
     const [speciesData, evolutionPaths]: [SerialisedSpecies, EvoPath[][]] = data;
     const { description, species, genderRatio, eggGroups } = speciesData;
-    const detailed: PokemonDetails = {
+    const { id, name, ...pokemon } = selectedPokemon;
+    const animatedImgSrc = getAnimatedImgSrc(id, name);
+
+    const detailed: PokemonDetailed = {
+      id,
+      name,
       description,
       species,
       genderRatio,
       eggGroups,
       evolutionPaths,
+      animatedImgSrc,
+      ...pokemon,
     };
-    setPokemonDetails(detailed);
+    setPokemonDetailed(detailed);
+    // ignore selectedPokemon in dependancy array. PokemonDetailed should only be built when data is ready
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const typeColours = selectedPokemon && getPokemonTypecolours(selectedPokemon.types[0]);
@@ -70,29 +79,29 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
   );
   if (loading) content = 'loading...';
   else if (error) content = <ErrorMessage error={error} />;
-  else if (pokemonDetails && selectedPokemon) {
+  else if (pokemonDetailed) {
     const infoTabs = [
       {
         label: 'About',
         content: (
           <PokemonAbout
-            species={pokemonDetails.species}
-            abilities={selectedPokemon.abilities}
-            genderRatio={pokemonDetails.genderRatio}
-            eggGroups={pokemonDetails.eggGroups}
+            species={pokemonDetailed.species}
+            abilities={pokemonDetailed.abilities}
+            genderRatio={pokemonDetailed.genderRatio}
+            eggGroups={pokemonDetailed.eggGroups}
           />
         ),
       },
       {
         label: 'Description',
-        content: pokemonDetails.description,
+        content: pokemonDetailed.description,
       },
       {
         label: 'Moves',
         content: (
           <PokemonMovesTable
-            taughtMoves={selectedPokemon.taughtMoves}
-            levelUpMoves={selectedPokemon.levelUpMoves}
+            taughtMoves={pokemonDetailed.taughtMoves}
+            levelUpMoves={pokemonDetailed.levelUpMoves}
             bgColour={primaryColour}
           />
         ),
@@ -101,7 +110,7 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
         label: 'Evolution Paths',
         content: (
           <PokemonEvolutionPaths
-            evolutionPaths={pokemonDetails.evolutionPaths}
+            evolutionPaths={pokemonDetailed.evolutionPaths}
             bgColour={primaryColour}
           />
         ),
@@ -112,31 +121,28 @@ const PokemonDetailedContainer: React.FC<Props> = ({ selectedPokemon }) => {
       <Fragment>
         {!allImgsLoaded && 'loading image'}
         <div className={allImgsLoaded ? 'pokemon-details' : 'display-none'}>
-          <span className="pokemon-name">{selectedPokemon.name}</span>
+          <span className="pokemon-name">{pokemonDetailed.name}</span>
           <div className="pokemon-overview">
             <img
               className="pokemon-image"
-              src={
-                getAnimatedImgSrc(selectedPokemon.id, selectedPokemon.name) ||
-                selectedPokemon.imgSrc
-              }
-              alt={selectedPokemon.name}
+              src={pokemonDetailed.animatedImgSrc || pokemonDetailed.imgSrc}
+              alt={pokemonDetailed.name}
               onLoad={handleImgLoad}
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null;
                 currentTarget.src = pokemonImgErr;
               }}
             />
-            <PokemonStats stats={selectedPokemon.stats} barColour={secondaryColour} />
+            <PokemonStats stats={pokemonDetailed.stats} barColour={secondaryColour} />
             <div className="pokemon-extra-info">
               <div className="pokemon-types">
-                {selectedPokemon.types.map((type) => (
+                {pokemonDetailed.types.map((type) => (
                   <PokemonTypePill key={type} type={type} />
                 ))}
               </div>
               <div className="pokemon-measurements">
-                <span className="measurement-title">Height:</span> {selectedPokemon.height * 10} cm
-                <span className="measurement-title">Weight:</span> {selectedPokemon.weight / 10} kg
+                <span className="measurement-title">Height:</span> {pokemonDetailed.height * 10} cm
+                <span className="measurement-title">Weight:</span> {pokemonDetailed.weight / 10} kg
               </div>
             </div>
           </div>
